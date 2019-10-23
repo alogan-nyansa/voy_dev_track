@@ -53,7 +53,7 @@ class GQLDevice:
         print(f'equal AP: {self.last_ap != self.ap_mac_addr}')
         '''
         if (datetime.now(timezone.utc) - time_delta) < self.last_updated:
-            if (cfg.alerting.constant and self.last_ap != self.ap_mac_addr) or (self.last_alert - datetime.now(timezone.utc) > timedelta(hours=24)):
+            if (cfg.alerting.constant and self.last_ap != self.ap_mac_addr) or (datetime.now(timezone.utc) - self.last_alert > timedelta(hours=24)):
                 self.alert(cfg=cfg)
         return
 
