@@ -4,8 +4,9 @@ from datetime import datetime
 import yaml
 
 from Objects.Config import Config
-from Objects.Device import Device
+from Objects.GQLDevice import GQLDevice
 from Objects.GraphQL import Connection
+from Objects.GraphQL import Device
 
 
 def main(cfgfile, savefile='dev_info.yaml') -> str:
@@ -25,16 +26,16 @@ def main(cfgfile, savefile='dev_info.yaml') -> str:
     cl = gc.get_all_clients()
 
     # Make a list of Device Objects Merging in saved info from previous runs
-    for d in cl:
+    for d in cl:  # type: Device
         try:
             d_info = dev_info[d.uuid]
         except (KeyError, TypeError):
             print(f'not found {d}')
             d_info = None
-        dl[d.uuid] = Device(sgqlc_device=d, dev_info=d_info)
+        dl[d.uuid] = GQLDevice(sgqlc_device=d, dev_info=d_info)
 
     # Iterate through Devices and check if they have been online recently, alert, then update the saved info
-    for did, d in dl.items():  # type: str, Device
+    for did, d in dl.items():  # type: str, GQLDevice
         print(f'checking {did}')
         d.check_online(cfg=cfg)
         d.update_info(save_info=save_info)
@@ -46,7 +47,7 @@ def main(cfgfile, savefile='dev_info.yaml') -> str:
     return f'Completed run at {datetime.utcnow()}'
 
 
-def convert_null_to_none(data):
+def convert_null_to_none(data) -> any:
     if isinstance(data, list):
         data[:] = [convert_null_to_none(i) for i in data]
     elif isinstance(data, dict):

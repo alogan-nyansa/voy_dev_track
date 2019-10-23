@@ -5,7 +5,7 @@ from pytz import timezone
 
 
 class Config:
-    def __init__(self, *, cfg):
+    def __init__(self, *, cfg) -> None:
         with open(cfg) as f:
             self.raw_cfg = yaml.load(f, Loader=yaml.BaseLoader)
         self.token = self.raw_cfg['token']  # type: str
@@ -14,14 +14,13 @@ class Config:
         self.macs = self.raw_cfg['macs']  # type: List[str]
         self.timezone = timezone(self.raw_cfg['timezone'])  # type: timezone
         self.alerting = Alerting(alert_config=self.raw_cfg['alerting'])
-        return
 
     def __repr__(self):
         return "{}({!r})".format(self.__class__.__name__, self.__dict__)
 
 
 class Alerting:
-    def __init__(self, alert_config):
+    def __init__(self, alert_config) -> None:
         self.constant = alert_config['constant_alerting']  # type: bool
         self.alert_provider = alert_config['alert_provider']  # type: str
         self.smtp_host = alert_config['smtp']['host']  # type: str
@@ -30,7 +29,6 @@ class Alerting:
         self.smtp_pass = alert_config['smtp']['pass']  # type: str
         self.smtp_sender = alert_config['smtp']['sender']  # type: str
         self.smtp_receivers = alert_config['smtp']['receivers']  # type: List[str]
-        return
 
     def __repr__(self):
         return "{}({!r})".format(self.__class__.__name__, self.__dict__)

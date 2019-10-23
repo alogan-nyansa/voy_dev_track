@@ -7,10 +7,11 @@ from email.mime.text import MIMEText
 from dateutil import parser
 
 from Objects.Config import Config
+from Objects.vapi2_schema import Device
 
 
-class Device:
-    def __init__(self, sgqlc_device, dev_info):
+class GQLDevice:
+    def __init__(self, sgqlc_device: Device, dev_info: dict) -> None:
         self.uuid = sgqlc_device.uuid  # type: str
         self.ip_address = sgqlc_device.ip_address  # type: str
         self.hostname = sgqlc_device.hostname  # type: str
@@ -28,12 +29,11 @@ class Device:
             self.last_run = parser.parse(dev_info['last_run'])
             self.last_ap = dev_info['last_ap']
             self.last_alert = parser.parse(dev_info['last_alert'])
-        return
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{}({!r})".format(self.__class__.__name__, self.__dict__)
 
-    def check_online(self, cfg: Config):
+    def check_online(self, cfg: Config) -> None:
         # Records are updated every 5 minutes, so use 2 * 5 minutes or 2 * interval, whichever is greater
         if cfg.interval < 5:
             time_delta = timedelta(minutes=10)
@@ -57,18 +57,19 @@ class Device:
                 self.alert(cfg=cfg)
         return
 
-    def update_info(self, save_info: dict):
+    def update_info(self, save_info: dict) -> None:
         save_info.setdefault(self.uuid, {})['last_run'] = datetime.now(timezone.utc).isoformat()
         save_info.setdefault(self.uuid, {})['last_ap'] = self.ap_mac_addr
         save_info.setdefault(self.uuid, {})['last_alert'] = self.last_alert.isoformat()
+        return
 
-    def alert(self, cfg: Config):
+    def alert(self, cfg: Config) -> None:
         if cfg.alerting.alert_provider == 'smtp':
             self.smtp_alert(cfg=cfg)
         self.last_alert = datetime.now(timezone.utc)
         return
 
-    def smtp_alert(self, cfg: Config):
+    def smtp_alert(self, cfg: Config) -> None:
         fmt = '%Y-%m-%d %H:%M %Z'
         msg = MIMEMultipart()
         msg['From'] = cfg.alerting.smtp_sender
