@@ -1,6 +1,7 @@
 FROM python:3.7.5-alpine3.10
 
-ENV VERSION 0.9.1
+ARG VERSION
+
 ENV VOLUME ["/config"]
 RUN mkdir -p /voy_dev_track \
     && mkdir -p /config \
