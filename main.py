@@ -2,6 +2,7 @@ import argparse
 from datetime import datetime
 
 import yaml
+from apscheduler.schedulers.background import BlockingScheduler
 
 from Objects.Config import Config
 from Objects.GQLDevice import GQLDevice
@@ -9,14 +10,21 @@ from Objects.GraphQL import Connection
 from Objects.GraphQL import Device
 
 
-def main(cfgfile, savefile='dev_info.yaml') -> str:
+def main(cfgfile, savefile='dev_info.yaml') -> None:
     # Setup
     cfg = Config(cfg=cfgfile)
+    scheduler = BlockingScheduler()
+    scheduler.add_job(dcheck, 'interval', args=[cfg, savefile], minutes=cfg.interval)
+    scheduler.start()
+    return
+
+
+def dcheck(cfg: Config, savefile) -> str:
     try:
         with open(savefile) as f:
-            dev_info = yaml.load(f, Loader=yaml.BaseLoader)
+            dev_info = yaml.load(f, Loader=yaml.BaseLoader)  # type: dict
     except FileNotFoundError:
-        dev_info = {}
+        dev_info = {}  # type: dict
     convert_null_to_none(dev_info)
     gc = Connection(cfg=cfg)
     dl = {}

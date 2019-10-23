@@ -1,3 +1,4 @@
+APScheduler==3.6.1
 graphql-core==2.2.1
 promise==2.2.1
 python-dateutil==2.8.0
@@ -6,3 +7,4 @@ PyYAML==5.1.2
 Rx==1.6.1
 sgqlc==8.1
 six==1.12.0
+tzlocal==2.0.0

@@ -1,3 +1,7 @@
+# ****************IMPORTANT****************
+# Fill out then rename to config.yaml
+# ****************IMPORTANT****************
+
 endpoint: https://demo1.nyansa.com/api/v2/graphql #replace initial domain with your Voyance instance domain
 token: xxxxxxxxxxxxxxxxxxx # From Voyance Account info page
 interval: 2 # In Minutes
