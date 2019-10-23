@@ -1,0 +1,28 @@
+endpoint: https://demo1.nyansa.com/api/v2/graphql #replace initial domain with your Voyance instance domain
+token: xxxxxxxxxxxxxxxxxxx # From Voyance Account info page
+interval: 2 # In Minutes
+
+# If you want local time in the emails use the appropriate TZ Database Name
+# from: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+# You can use 'UTC' if you would like as a default
+timezone: US/Central
+
+macs: # List of MAC Addresses (YAML Format uses - to denote a list)
+  - AA:AA:BB:BB:CC:CC
+  - 00:00:01:AA:BB:CC
+
+alerting:
+  # Set constant_alerting to 'True' if you want constant updates on the device location changes
+  # Alerts come at the configured interval when the device changes location)
+  # othewise alert once per 24 hours if the device is on the network
+  constant_alerting: False
+  alert_provider: smtp
+  smtp:
+    host: smtp.gmail.com
+    port: 465
+    user: someuser@test.com
+    pass: fatcowlazydog
+    sender: someaccount@test.com
+    receivers:
+      - noc@test.com
+      - thisotheruser@test.com
