@@ -29,5 +29,5 @@ Copy the config_sample.yaml into the folder you created from github and rename i
 
 Update the config.yaml with the information for your instance. 
 
-'docker run -v *path on your machine to the directory with the savefile and config file*:/config'
+'docker run -v *path on your machine to the directory with the savefile and config file*:/config alogannyansa/voy_dev_track'
 
