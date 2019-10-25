@@ -88,8 +88,14 @@ class GQLDevice:
                 Link to Voyance: {self.voyance_url}
             ''', 'plain'))
         print(msg)
-        context = ssl.create_default_context()
-        with smtplib.SMTP_SSL(cfg.alerting.smtp_host, cfg.alerting.smtp_port, context=context) as server:
-            server.login(user=cfg.alerting.smtp_user, password=cfg.alerting.smtp_pass)
-            server.send_message(msg)
+        if cfg.alerting.smtp_use_tls:
+            context = ssl.create_default_context()
+            with smtplib.SMTP_SSL(cfg.alerting.smtp_host, cfg.alerting.smtp_port, context=context) as server:
+                server.login(user=cfg.alerting.smtp_user, password=cfg.alerting.smtp_pass)
+                server.send_message(msg)
+                server.quit()
+        else:
+            with smtplib.SMTP(cfg.alerting.smtp_host) as server:
+                server.send_message(msg)
+                server.quit()
         return

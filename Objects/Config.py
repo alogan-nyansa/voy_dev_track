@@ -25,6 +25,7 @@ class Alerting:
         self.alert_provider = alert_config['alert_provider']  # type: str
         self.smtp_host = alert_config['smtp']['host']  # type: str
         self.smtp_port = int(alert_config['smtp']['port'])  # type: int
+        self.smtp_use_tls = alert_config['smtp']['use_tls']  # type: bool
         self.smtp_user = alert_config['smtp']['user']  # type: str
         self.smtp_pass = alert_config['smtp']['pass']  # type: str
         self.smtp_sender = alert_config['smtp']['sender']  # type: str

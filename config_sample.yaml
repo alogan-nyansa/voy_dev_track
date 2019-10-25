@@ -24,9 +24,10 @@ alerting:
   smtp:
     host: smtp.gmail.com
     port: 465
+    use_tls: True  # True or False
     user: someuser@test.com
     pass: fatcowlazydog
     sender: someaccount@test.com
-    receivers:
+    receivers:  # List of MAC Addresses (YAML Format uses - to denote a list)
       - noc@test.com
       - thisotheruser@test.com
