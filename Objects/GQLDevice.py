@@ -95,7 +95,7 @@ class GQLDevice:
                 server.send_message(msg)
                 server.quit()
         else:
-            with smtplib.SMTP(cfg.alerting.smtp_host) as server:
+            with smtplib.SMTP(cfg.alerting.smtp_host, cfg.alerting.smtp_port) as server:
                 server.send_message(msg)
                 server.quit()
         return
