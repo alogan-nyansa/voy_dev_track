@@ -28,6 +28,6 @@ alerting:
     user: someuser@test.com
     pass: fatcowlazydog
     sender: someaccount@test.com
-    receivers:  # List of MAC Addresses (YAML Format uses - to denote a list)
+    receivers:  # List of email addresses (YAML Format uses - to denote a list)
       - noc@test.com
       - thisotheruser@test.com
