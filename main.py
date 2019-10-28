@@ -25,8 +25,10 @@ def dcheck(cfg: Config, savefile) -> str:
             dev_info = yaml.load(f, Loader=yaml.BaseLoader)  # type: dict
     except FileNotFoundError:
         dev_info = {}  # type: dict
+
     convert_null_to_none(dev_info)
     gc = Connection(cfg=cfg)
+    convert_null_to_none(cfg)
     dl = {}
     save_info = {}
 

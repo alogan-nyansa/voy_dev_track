@@ -46,14 +46,18 @@ class GQLDevice:
         '''
         '''
         Debug Code, yes I know there is probably a better way to do this
+        '''
         print(f'time - delta: {(datetime.now(timezone.utc) - time_delta)}')
         print(f'last_updated: {self.last_updated}')
+        '''
         print(f'last AP: {self.last_ap}')
         print(f'current AP: {self.ap_mac_addr}')
         print(f'equal AP: {self.last_ap != self.ap_mac_addr}')
         '''
         if (datetime.now(timezone.utc) - time_delta) < self.last_updated:
+            print('checking alerting status')
             if (cfg.alerting.constant and self.last_ap != self.ap_mac_addr) or (datetime.now(timezone.utc) - self.last_alert > timedelta(hours=24)):
+                print('alerting')
                 self.alert(cfg=cfg)
         return
 
@@ -77,7 +81,7 @@ class GQLDevice:
         msg['Subject'] = f'Subject: Tracked Device Online - {self.uuid} on AP: {self.ap_name} at {self.last_updated.astimezone(cfg.timezone).strftime(fmt)}'
         msg.attach(MIMEText(f'''
             Tracked device:
-                MAC:{self.uuid}
+                MAC: {self.uuid}
                 Hostname: {self.hostname}
                 IP: {self.ip_address}
                 SSID: {self.essid}

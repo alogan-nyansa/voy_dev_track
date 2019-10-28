@@ -1,3 +1,4 @@
+import ast
 from typing import List
 
 import yaml
@@ -21,11 +22,11 @@ class Config:
 
 class Alerting:
     def __init__(self, alert_config) -> None:
-        self.constant = alert_config['constant_alerting']  # type: bool
+        self.constant = ast.literal_eval(alert_config['constant_alerting'])  # type: bool
         self.alert_provider = alert_config['alert_provider']  # type: str
         self.smtp_host = alert_config['smtp']['host']  # type: str
         self.smtp_port = int(alert_config['smtp']['port'])  # type: int
-        self.smtp_use_tls = alert_config['smtp']['use_tls']  # type: bool
+        self.smtp_use_tls = ast.literal_eval(alert_config['smtp']['use_tls'])  # type: bool
         self.smtp_user = alert_config['smtp']['user']  # type: str
         self.smtp_pass = alert_config['smtp']['pass']  # type: str
         self.smtp_sender = alert_config['smtp']['sender']  # type: str
