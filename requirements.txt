@@ -3,7 +3,7 @@ graphql-core==2.2.1
 promise==2.2.1
 python-dateutil==2.8.0
 pytz==2019.3
-PyYAML==5.1.2
+PyYAML==5.4
 Rx==1.6.1
 sgqlc==8.1
 six==1.12.0
