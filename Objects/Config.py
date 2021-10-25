@@ -12,7 +12,7 @@ class Config:
         self.token = self.raw_cfg['token']  # type: str
         self.endpoint = self.raw_cfg['endpoint']  # type: str
         self.interval = int(self.raw_cfg['interval'])  # type: int
-        self.macs = self.raw_cfg['macs']  # type: List[str]
+        self.macs = self.raw_cfg['macs']  # type: List[Dict[str, str]]
         self.timezone = timezone(self.raw_cfg['timezone'])  # type: timezone
         self.alerting = Alerting(alert_config=self.raw_cfg['alerting'])
 
