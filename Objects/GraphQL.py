@@ -14,15 +14,17 @@ class Connection:
         self.cfg = cfg
         self.token = cfg.token
         self.url = cfg.endpoint
-        self.ep = HTTPEndpoint(self.url, {'api-token': self.token})
+        self.ep = HTTPEndpoint(self.url, {"api-token": self.token})
 
-    def get_all_clients(self) -> List[Device]:
+    def get_all_devices(self) -> List[Device]:
         dev_list = []
         page = 1
         end_page = 2
         while end_page >= page:
             op = Operation(schema.NyansaGraphQLQuery)
-            dev = op.device_list(uuids=self.cfg.macs, page=page, page_size=500, sort_by=['uuid'])
+            dev = op.device_list(
+                uuids=self.cfg.macs, page=page, page_size=500, sort_by=["uuid"]
+            )
             dev.page()
             dev.page_count()
             dev.devices()
@@ -40,7 +42,7 @@ class Connection:
             for d in devinfo.devices:  # type: Device
                 dev_list.append(d)
             end_page = devinfo.page_count
-            print(f'Run {page} of {end_page} - Length {len(dev_list)}')
+            print(f"Run {page} of {end_page} - Length {len(dev_list)}")
             page += 1
-            sleep(.5)
+            sleep(0.5)
         return dev_list
