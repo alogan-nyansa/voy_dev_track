@@ -16,14 +16,14 @@ class Connection:
         self.url = cfg.endpoint
         self.ep = HTTPEndpoint(self.url, {"api-token": self.token})
 
-    def get_all_devices(self) -> List[Device]:
+    def get_monitored_devices(self) -> List[Device]:
         dev_list = []
         page = 1
         end_page = 2
         while end_page >= page:
             op = Operation(schema.NyansaGraphQLQuery)
             dev = op.device_list(
-                uuids=self.cfg.macs, page=page, page_size=500, sort_by=["uuid"]
+                uuids=self.cfg.mac_list, page=page, page_size=500, sort_by=["uuid"]
             )
             dev.page()
             dev.page_count()

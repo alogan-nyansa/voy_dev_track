@@ -1,5 +1,5 @@
 import ast
-from typing import List
+from typing import List, Dict
 
 import yaml
 from pytz import timezone
@@ -12,12 +12,26 @@ class Config:
         self.token = self.raw_cfg["token"]  # type: str
         self.endpoint = self.raw_cfg["endpoint"]  # type: str
         self.interval = int(self.raw_cfg["interval"])  # type: int
-        self.macs = self.raw_cfg["macs"]  # type: List[Dict[str, str]]
         self.timezone = timezone(self.raw_cfg["timezone"])  # type: timezone
         self.alerting = Alerting(alert_config=self.raw_cfg["alerting"])
+        macs = {}
+        for device in self.raw_cfg["macs"]:
+            if isinstance(device, str):
+                pieces = device.split()
+                if len(pieces) > 1:
+                    macs[pieces[0].upper()] = pieces[1]
+                else:
+                    macs[pieces[0].upper()] = "No Note Given"
+            elif isinstance(device, dict):
+                device_uuid, device_note = list(device.items())[0]
+                macs[device_uuid.upper()] = device_note
+        self.macs: Dict[str, str] = macs
+        self.mac_list: List[str] = list(set(self.macs.keys()))
 
     def __repr__(self):
-        return "{}({!r})".format(self.__class__.__name__, self.__dict__)
+        data = self.__dict__.copy()
+        data.pop("raw_cfg")
+        return "{}({!r})".format(self.__class__.__name__, data)
 
 
 class Alerting:

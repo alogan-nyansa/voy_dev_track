@@ -84,16 +84,17 @@ class GQLDevice:
         msg.attach(
             MIMEText(
                 f"""
-            Tracked device:
-                MAC: {self.uuid}
-                Hostname: {self.hostname}
-                IP: {self.ip_address}
-                SSID: {self.essid}
-                Last AP Name: {self.ap_name}
-                Last AP MAC: {self.ap_mac_addr}
-                Last SNR: {self.snr_db}
-                Last Updated: {self.last_updated.astimezone(cfg.timezone).strftime(fmt)}
-                Link to Voyance: {self.voyance_url}
+                    Tracked device:
+                        MAC: {self.uuid}
+                        Note: {cfg.macs[self.uuid]}
+                        Hostname: {self.hostname}
+                        IP: {self.ip_address}
+                        SSID: {self.essid}
+                        Last AP Name: {self.ap_name}
+                        Last AP MAC: {self.ap_mac_addr}
+                        Last SNR: {self.snr_db}
+                        Last Updated: {self.last_updated.astimezone(cfg.timezone).strftime(fmt)}
+                        Link to Voyance: {self.voyance_url}
             """,
                 "plain",
             )

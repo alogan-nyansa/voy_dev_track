@@ -11,9 +11,9 @@ interval: 2 # In Minutes
 # You can use 'UTC' if you would like as a default
 timezone: US/Central
 
-macs: # List of MAC Addresses (YAML Format uses - to denote a list)
-  - AA:AA:BB:BB:CC:CC
-  - 00:00:01:AA:BB:CC
+macs: # List of quoted MAC Addresses followed by a colon and a note (YAML Format uses - to denote a list)
+  - "AA:AA:BB:BB:CC:CC": test device
+  - "00:00:01:AA:BB:CC": "Test Device 2"
 
 alerting:
   # Set constant_alerting to 'True' if you want constant updates on the device location changes

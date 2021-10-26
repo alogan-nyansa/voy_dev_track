@@ -13,8 +13,11 @@ from Objects.GraphQL import Device
 def main(cfgfile, savefile="dev_info.yaml") -> None:
     # Setup
     cfg = Config(cfg=cfgfile)
+    dcheck(cfg=cfg, savefile=savefile)
     scheduler = BlockingScheduler()
-    scheduler.add_job(dcheck, "interval", args=[cfg, savefile], minutes=cfg.interval)
+    scheduler.add_job(
+        dcheck, "interval", args=[cfg, savefile], minutes=cfg.interval, max_instances=1
+    )
     scheduler.start()
     return
 
@@ -22,30 +25,31 @@ def main(cfgfile, savefile="dev_info.yaml") -> None:
 def dcheck(cfg: Config, savefile) -> str:
     try:
         with open(savefile) as f:
-            dev_info = yaml.load(f, Loader=yaml.BaseLoader)  # type: dict
+            dev_info: dict = yaml.load(f, Loader=yaml.BaseLoader)
     except FileNotFoundError:
-        dev_info = {}  # type: dict
+        dev_info: dict = {}
 
     convert_null_to_none(dev_info)
     gc = Connection(cfg=cfg)
     convert_null_to_none(cfg)
-    dl = {}
+    device_list = {}
     save_info = {}
-
+    print(cfg)
     # Get List of SGQLC Devices from Voyance
-    all_devices = gc.get_all_devices()
-
+    monitored_devices = gc.get_monitored_devices()
     # Make a list of Device Objects Merging in saved info from previous runs
-    for device in all_devices:  # type: Device
+    device: Device
+    for device in monitored_devices:
         try:
             device_info = dev_info[device.uuid]
         except (KeyError, TypeError):
-            print(f"not found {device}")
+            print(f"{device.uuid} not found in {savefile}")
             device_info = None
-        dl[device.uuid] = GQLDevice(sgqlc_device=device, dev_info=device_info)
+        device_list[device.uuid] = GQLDevice(sgqlc_device=device, dev_info=device_info)
 
     # Iterate through Devices and check if they have been online recently, alert, then update the saved info
-    for device_uuid, device in dl.items():  # type: str, GQLDevice
+    device: GQLDevice
+    for device_uuid, device in device_list.items():
         print(f"checking {device_uuid}")
         device.check_online(cfg=cfg)
         device.update_info(save_info=save_info)
